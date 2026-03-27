@@ -1,0 +1,6 @@
+flask
+tensorflow
+librosa
+numpy
+requests
+pyserial
