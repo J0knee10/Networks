@@ -1,0 +1,294 @@
+40 Multiple Choice Questions: Cyber-Physical Systems Security (SC4015/CE4055)
+
+Section 1: Fundamental CPS Concepts
+
+1. Which of the following is NOT a core characteristic of an embedded Cyber-Physical System as defined in the course?
+A. Hidden (not explicit like a desktop)
+B. Complex (many interacting components)
+C. Centralized (all logic stored in a single main server)
+D. Everywhere (pervasive in modern infrastructure)
+
+2. A "Hard" real-time constraint means:
+A. The system must run on high-performance hardware.
+B. Missing a deadline results in a catastrophic failure.
+C. The system is difficult to program.
+D. The system response is slow but predictable.
+
+3. In the hierarchy of computing power, which model is the most expressive?
+A. Finite-state machine
+B. Combinational logic
+C. Pushdown automaton
+D. Turing machine
+
+4. A Moore machine is characterized by the fact that its output depends on:
+A. The current state only.
+B. The current state and current input.
+C. The previous input only.
+D. The transition arc between states.
+
+5. Reliability R(t) is defined as:
+A. The probability that a system is working correctly at time t=0.
+B. The probability that a system will work correctly provided it was working at t=0.
+C. The total uptime divided by total downtime.
+D. The speed at which a system recovers from an error.
+
+Section 2: Security Triad & Cryptographic Primitives
+
+6. Which security property ensures that a sender cannot later deny having sent a message?
+A. Integrity
+B. Confidentiality
+C. Non-repudiation
+D. Authenticity
+
+7. The "Security Triad" for IT security traditionally consists of:
+A. Privacy, Safety, Security
+B. Confidentiality, Integrity, Availability
+C. Authentication, Authorization, Accounting
+D. Detection, Prevention, Recovery
+
+8. Which cryptographic primitive is primarily used to provide message integrity but NOT secrecy?
+A. AES-GCM
+B. RSA
+C. Hash Function (e.g., SHA-256)
+D. Diffie-Hellman
+
+9. The Vernam Cipher (One-Time Pad) is theoretically perfectly secure, yet practically unused because:
+A. The key is easily brute-forced.
+B. It is vulnerable to side-channel attacks.
+C. The key size must be as large as the plaintext.
+D. It relies on security through obscurity.
+
+10. In RSA encryption, the security of the system primarily relies on the difficulty of:
+A. Computing discrete logarithms.
+B. Finding collisions in hash functions.
+C. Factoring large prime numbers.
+D. Generating truly random numbers.
+
+11. A Message Authentication Code (MAC) differs from a standard Hash function because:
+A. A MAC is always shorter.
+B. A MAC requires a secret key shared between generator and validator.
+C. A MAC is not one-way.
+D. A MAC provides non-repudiation.
+
+12. Which mode of MAC construction uses a block cipher like AES as its core?
+A. HMAC
+B. KMAC
+C. CMAC
+D. SHA-3
+
+13. Kerckhoffs's Principle states that:
+A. A system should be secure even if everything about it is public, except the key.
+B. Security is best achieved through secret proprietary algorithms.
+C. Public keys should never be shared over insecure channels.
+D. Complexity is the best defense against hackers.
+
+Section 3: Side-Channel & Micro-architectural Attacks
+
+14. A "Side-Channel Attack" is an attack that exploits:
+A. Flaws in the mathematical logic of an algorithm.
+B. Physical leakages like power consumption, timing, or EM emissions.
+C. Buffer overflows in the software stack.
+D. Weaknesses in the user's password choice.
+
+15. Which correlation model is most commonly used to analyze power consumption leakages in CMOS devices?
+A. Hamming Distance/Weight
+B. Linear Regression
+C. Fourier Transform
+D. Euclidean Distance
+
+16. The "Cold Boot Attack" takes advantage of which physical phenomenon?
+A. Processor overheating
+B. Data remanence in DRAM after power is cut
+C. Quantum tunneling
+D. Magnetic interference
+
+17. The Meltdown attack primarily exploits which architectural feature of modern CPUs?
+A. L3 Cache size
+B. Hyper-threading
+C. Out-of-order execution
+D. Branch prediction
+
+18. "Rowhammer" is a hardware-level attack that targets:
+A. The ALU of a CPU.
+B. Data stored in DRAM by rapidly accessing adjacent memory rows.
+C. The BIOS firmware.
+D. The communication bus between the sensor and actuator.
+
+19. A "Fault Injection Attack" (FIA) might involve using which of the following to cause a glitch?
+A. High-precision lasers
+B. Malicious SQL queries
+C. Replaying captured packets
+D. Social engineering
+
+20. The PACMAN attack targets which specific security feature?
+A. RSA Private Keys
+B. Pointer Authentication Codes (PAC) in ARM processors
+C. AES S-Boxes
+D. TLS Handshakes
+
+21. To prevent timing attacks on RSA modular exponentiation, a developer should implement:
+A. Randomized timing calculations.
+B. Variable-length keys.
+C. Constant-time execution.
+D. More rounds of encryption.
+
+Section 4: Key Management & Trusted Computing
+
+22. A Trusted Platform Module (TPM) is best described as:
+A. A software firewall built into the OS.
+B. A dedicated hardware chip providing a "Root of Trust."
+C. A cloud-based key storage service.
+D. A protocol for secure wireless pairing.
+
+23. Which key in a TPM is a unique asymmetric private-public key pair that never leaves the chip?
+A. Storage Root Key (SRK)
+B. Endorsement Key (EK)
+C. Session Key
+D. Platform Configuration Register (PCR)
+
+24. A "Physically Unclonable Function" (PUF) can be thought of as a:
+A. Mathematical formula for random numbers.
+B. Digital fingerprint based on unique physical variations in hardware.
+C. Method for detecting side-channel leakage.
+D. Type of hardware firewall.
+
+25. Which HSM (Hardware Security Module) certification level requires "tamper-active" mechanisms that delete data if a physical breach is detected?
+A. Level 1
+B. Level 2
+C. Level 3
+D. Level 4
+
+26. The "Cryptoperiod" of a key refers to:
+A. The time it takes to generate the key.
+B. The time span during which a specific key is authorized for use.
+C. The time required to crack the key using DPA.
+D. The length of the key in bits.
+
+27. What is the primary purpose of a Trusted Service Manager (TSM) in NFC ecosystems?
+A. To encrypt the radio signal.
+B. To act as a unifying service provider to manage secure elements (SE).
+C. To prevent the phone from overheating.
+D. To generate PUF responses.
+
+Section 5: Domain-Specific Security (Automotive, SCADA, IoT)
+
+28. Which component of a SCADA system is responsible for directly controlling local industrial equipment?
+A. Human-Machine Interface (HMI)
+B. Programmable Logic Controller (PLC)
+C. Corporate Server
+D. Historian
+
+29. The "Stuxnet" worm was a landmark attack because it specifically targeted:
+A. Windows login credentials.
+B. Industrial PLCs to damage physical centrifuges.
+C. Smart Grid meters at the consumer level.
+D. Bluetooth infotainment systems in cars.
+
+30. In the SAE J3016 standard, "Level 5" autonomy represents:
+A. No Automation.
+B. Partial Automation (driver must monitor).
+C. High Automation (geofenced).
+D. Full Automation (no human intervention in any condition).
+
+31. A "RollJam" attack is designed to defeat:
+A. Static passwords.
+B. Rolling codes used in Remote Keyless Entry (RKE).
+C. RSA encryption.
+D. GPS signals.
+
+32. Which automotive bus system is the most common internal network for connecting ECUs?
+A. Ethernet
+B. USB 3.0
+C. CAN Bus
+D. ZigBee
+
+33. A "Data Diode" is used in SCADA security to:
+A. Encrypt data at rest.
+B. Physically enforce one-way communication to protect critical networks.
+C. Speed up communication between sensors.
+D. Detect malware in the Historian.
+
+34. In Smart Grid security, a compromised Smart Meter at a customer's house is a threat to:
+A. Only the customer's privacy.
+B. The utility company's billing integrity and grid stability.
+C. The generation plant's physical safety only.
+D. The global Internet backbone.
+
+35. The "Dragonfly" handshake used in WPA3 is designed to provide:
+A. Forward Secrecy.
+B. Faster connection speeds.
+C. Backward compatibility with WEP.
+D. Integration with Bluetooth.
+
+36. A "Relay Attack" on an NFC payment system can be mitigated by using:
+A. Stronger passwords.
+B. Distance Bounding Protocols.
+C. Larger antennas.
+D. QR codes.
+
+37. Which of the following is a vulnerability of the WEP wireless protocol?
+A. Using AES-256 which is too slow.
+B. Small 24-bit Initialization Vector (IV) leading to key reuse.
+C. Mandatory use of Digital Signatures.
+D. Incompatibility with Linux.
+
+38. The MITRE ATT&CK framework is used to:
+A. Calculate RSA keys.
+B. Classify and describe cyber adversary tactics and techniques.
+C. Certify HSM hardware.
+D. Measure the power consumption of a CPU.
+
+39. TVR Analysis stands for:
+A. Time, Velocity, Resistance
+B. Total Virtual Reality
+C. Threat, Vulnerability, Risk
+D. Target, Vector, Response
+
+40. According to the course summary, complexity is the:
+A. Goal of modern engineering.
+B. Enemy of security.
+C. Best way to hide secrets.
+D. Solution to side-channel attacks.
+
+---
+Answer Key:
+1. C
+2. B
+3. D
+4. A
+5. B
+6. C
+7. B
+8. C
+9. C
+10. C
+11. B
+12. C
+13. A
+14. B
+15. A
+16. B
+17. C
+18. B
+19. A
+20. B
+21. C
+22. B
+23. B
+24. B
+25. D
+26. B
+27. B
+28. B
+29. B
+30. D
+31. B
+32. C
+33. B
+34. B
+35. A
+36. B
+37. B
+38. B
+39. C
+40. B
