@@ -1,0 +1,20 @@
+# --- Web Server ---
+flask
+requests
+gunicorn
+
+# --- Core ML Engine (Stable Modern Versions) ---
+tensorflow>=2.15.0
+numpy>=1.23.5
+h5py>=3.8.0
+
+# --- Audio & Math ---
+librosa>=0.10.0
+pandas>=2.0.0
+scikit-learn>=1.2.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# --- Communication & Utils ---
+pyserial>=3.5
+ipykernel

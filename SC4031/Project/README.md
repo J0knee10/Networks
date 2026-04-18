@@ -1,56 +1,49 @@
 # Hybrid Edge-Cloud Fall Detection System (SC4031)
 
-This project implements a multimodal emergency detection system using an **Android Smartphone** as the IoT device and a **Python Flask Server** as the Cloud. It utilizes a 2-stage cascade to balance power efficiency with high-accuracy verification.
+This project implements a multimodal emergency detection system using an **Android Smartphone** as the IoT device and a **Python Flask Server** as the Cloud. It utilizes a 2-stage cascade with a real-time streaming verification architecture.
 
 ## 🏗 Architecture
-The system operates in two distinct stages:
 
 ### Stage 1: Local Physical Trigger (Edge)
-*   **Device:** Android Smartphone.
-*   **Sensor:** 6-Axis IMU (3-Axis Accelerometer + 3-Axis Gyroscope).
-*   **Logic:**
-    *   **Impact Detection:** Continuously monitors for a high-G impact (>40.0 m/s²).
-    *   **Local Verification:** Upon impact, a local **TensorFlow Lite** CNN model analyzes a 1-second window (120 samples at `SENSOR_DELAY_FASTEST`) of motion data to confirm a "Fall" signature.
-*   **Benefit:** Zero-latency response, privacy-preserving (mic is off), and works offline.
+*   **Device:** Android Smartphone (Samsung S23+ supported).
+*   **Sensor:** 6-Axis IMU (Accel + Gyro) sampled at **120Hz**.
+*   **Logic:** 
+    *   Continuously monitors for an impact (>40.0 m/s²).
+    *   Upon impact, it captures a window of 120 samples (80 pre-impact, 40 post-impact).
+    *   A local **TensorFlow Lite** CNN model verifies the "Fall" signature.
 
-### Stage 2: Cloud Voice Verification (Cloud)
+### Stage 2: Cloud Voice Verification (Cloud Streaming)
+*   **Architecture:** Stateful Streaming with Sliding Window.
 *   **Trigger:** Activated only if Stage 1 confirms a fall.
-*   **Capture:** Records 1 second of 16kHz Mono PCM audio.
-*   **Transmission:** Sends raw audio data via **HTTP POST (JSON)** to the Cloud.
+*   **Streaming:** The app records and sends audio in **1-second chunks** for up to 10 seconds.
 *   **Cloud Logic:**
-    *   **Feature Extraction:** Extracts 13 MFCCs (26 Mel bands, 16kHz) to match the training notebook.
-    *   **Verification:** A Full Keras CNN Model identifies the keyword: `"HELP"`, `"CANCEL"`, or `"BACKGROUND"`.
-*   **Response:**
-    *   **HELP:** Triggers a synthetic voice alarm and red UI alert on the phone.
-    *   **CANCEL:** Resets the system via voice command.
-    *   **BACKGROUND:** Silently ignores the trigger (False Alarm).
+    *   **Rolling Buffer:** The server maintains a 2-second buffer for each device.
+    *   **Sliding Window:** As chunks arrive, the server slides a 1s window (0.5s step) over the buffer to detect keywords ("HELP", "CANCEL").
+    *   **Low Latency:** The system triggers the alarm immediately if a keyword is found with >85% confidence, without waiting for the full 10s to finish.
 
 ---
 
 ## 🚀 Advanced Features
-*   **Online Model Updating:** Fulfills advanced project criteria. When a user provides feedback (e.g., clicking "FALSE ALARM" after an emergency trigger), the Cloud Server performs **runtime fine-tuning**. It uses `model.train_on_batch()` to update the neural network weights immediately, allowing the system to learn the user's specific environment and voice over time.
-*   **Multi-User Support:** The server uses the `deviceId` (Android ID) to track and log requests from multiple simultaneous devices.
-
----
-
-## 📁 Folder Structure
-*   `/Android_Fall_Detector`: Kotlin source for the Android app.
-*   `/Cloud_Server`: Flask `app.py`, the `emergency_model.h5` model, and `retrain_data/` storage.
-*   `/Training`: Jupyter notebooks (`.ipynb`) and CSV datasets for both IMU and Audio models.
+*   **Real-Time Online Updating:** When a user clicks "FALSE ALARM", the app sends the entire captured audio sequence. The server performs **runtime fine-tuning** using `model.train_on_batch()` to adapt to the user's specific voice and environment.
+*   **Multi-User Support:** Uses `deviceId` (Android ID) to track rolling buffers and logs for multiple simultaneous IoT devices.
+*   **Link Verification:** Includes a "CONNECT" feature to verify Wi-Fi and IP connectivity before use.
 
 ---
 
 ## 🛠 Cloud API Reference
 
-### 1. Inference: `POST /infer`
-Sends audio for keyword verification.
-*   **Payload:** `{"deviceId": "ID", "audio": [int_pcm_samples]}`
-*   **Returns:** `{"keyword": "HELP/CANCEL/BACKGROUND", "confidence": 0.98}`
+### 1. Connection Test: `GET /connect`
+Verifies the IoT device can reach the cloud.
+*   **Returns:** `{"status": "Connected"}`
 
-### 2. Online Update: `POST /update`
-Sends a label correction to trigger runtime retraining.
-*   **Payload:** `{"deviceId": "ID", "label": "HELP/BACKGROUND", "audio": [int_pcm_samples]}`
-*   **Returns:** `{"status": "Success", "metrics": [loss, accuracy]}`
+### 2. Stream Inference: `POST /infer`
+Sends a 1-second audio chunk (16kHz PCM).
+*   **Payload:** `{"deviceId": "ID", "audio": [samples]}`
+*   **Returns:** `{"keyword": "HELP/CANCEL/BACKGROUND", "confidence": 0.95}`
+
+### 3. Online Retraining: `POST /update`
+Sends corrective labels for runtime model updates.
+*   **Payload:** `{"deviceId": "ID", "label": "HELP/BACKGROUND", "audio": [samples]}`
 
 ---
 
@@ -58,15 +51,16 @@ Sends a label correction to trigger runtime retraining.
 
 ### 1. Server Setup
 1.  Navigate to `/Cloud_Server`.
-2.  Install dependencies: `pip install -r requirements.txt`.
-3.  Start the server: `python app.py`. Note your laptop's Local IP address.
+2.  Ensure `emergency_model.h5` is in the folder.
+3.  Run `pip install -r requirements.txt`.
+4.  Start server: `python app.py`. Note the **Local IP Address**.
 
 ### 2. Android Setup
 1.  Open `/Android_Fall_Detector` in Android Studio.
-2.  Enter your Laptop's IP in the app's IP address field.
-3.  Wear the phone and simulate a fall (drop onto a soft surface).
+2.  Install on phone (Developer Options -> USB Debugging must be ON).
+3.  Enter your Laptop's IP in the app and tap **CONNECT**. The button will turn **Green** if successful.
 
-### 3. Online Retraining
-1.  If the app incorrectly triggers an "EMERGENCY" alert, click **"FALSE ALARM"**.
-2.  The app will send the audio to the cloud.
-3.  Check the server console to see the model weights being updated in real-time.
+### 3. Simulation & Retraining
+1.  Drop the phone onto a soft surface (bed/sofa).
+2.  When "LISTENING" appears, shout **"HELP"**.
+3.  If it triggers incorrectly, tap **FALSE ALARM** to trigger the cloud retraining.
