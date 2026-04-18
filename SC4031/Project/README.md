@@ -1,6 +1,6 @@
 # Hybrid Edge-Cloud Fall Detection System (SC4031)
 
-This project implements a multimodal emergency detection system using an **Android Smartphone** as the IoT device and a **Python Flask Server** as the Cloud. It utilizes a 2-stage cascade with a real-time streaming verification architecture.
+This project implements a multimodal emergency detection system using an **Android Smartphone** as the IoT device and a **Python Flask Server** as the Cloud. It utilizes a 2-stage cascade with a real-time streaming verification architecture. Data collected using Arduino Nano 33 BLE due to different initial plans.
 
 ## 🏗 Architecture
 

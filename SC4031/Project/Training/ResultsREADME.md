@@ -23,4 +23,4 @@ This folder contains the datasets and training notebooks for the Hybrid Edge-Clo
 *   **Deployment:** Saved as `emergency_model.h5` for deployment on the Flask Cloud Server.
 
 ---
-*Note: These models are periodically updated via the online retraining endpoint (`/update`) using corrective user feedback to adapt to specific user environments.*
+*Note: Data was collected using Arduino Nano 33 BLE, due to different initial plans. These models are periodically updated via the online retraining endpoint (`/update`) using corrective user feedback to adapt to specific user environments.*
