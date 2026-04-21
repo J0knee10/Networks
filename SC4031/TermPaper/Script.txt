@@ -1,0 +1,61 @@
+### **SC4031 Presentation Script: Smart Home IoT Protocols Survey**
+**Target Duration:** 5 Minutes
+**Estimated Word Count:** ~720 words
+
+---
+
+**(Slide 1: Title Slide)**
+Hello everyone. My name is Jonathan Low, and today I’ll be presenting my taxonomical survey on the communication protocols that power the modern smart home. As we transition toward truly "Ambient Intelligence," the efficacy of these ecosystems is fundamentally tethered to the underlying protocols that must balance device density with severe energy and hardware constraints.
+**(Next)**
+
+**(Slide 2: The Problem & Evolution - Fig 1)**
+The residential landscape is undergoing rapid digitalization. By the end of this decade, the density of connected nodes per household is projected to reach hundreds. However, we face a technical "Iron Triangle": the constant struggle between power consumption, data throughput, and range. Traditional high-speed paradigms often fail in these constrained-resource environments.
+**(Next)**
+
+**(Slide 3: IoT Architecture - Fig 2)**
+To manage this complexity, we utilize a three-layer "Edge-Fog-Cloud" hierarchy. The **Edge Layer** consists of the physical sensors and actuators. The **Fog Layer**—composed of hubs and border routers—acts as local coordination to ensure "Local Survivability." Finally, the **Cloud Layer** provides remote accessibility and heavy-duty data processing. 
+**(Next)**
+
+**(Slide 4: Wi-Fi: The Connectivity Baseline - Fig 3)**
+We begin with Wi-Fi, or IEEE 802.11. Its primary strength is native IP support—allowing devices like smart cameras to connect directly to the internet. However, for a sensor meant to run on a coin-cell battery for two years, Wi-Fi’s high duty cycle and "always-on" radio requirements remain a critical barrier to deployment.
+**(Next)**
+
+**(Slide 5: BLE: The Efficiency Specialist - Fig 4)**
+In contrast, Bluetooth Low Energy, or BLE, is the efficiency specialist. It spends 99% of its time in deep sleep, using rapid "short-burst" communication to save energy. While traditionally limited by a Star topology to a single room, the advent of BLE Mesh and its role as a "commissioning" tool for Matter has made it indispensable for modern onboarding.
+**(Next)**
+
+**(Slide 6: Zigbee & The ZCL - Fig 5)**
+Next is Zigbee, a mature mesh protocol built on IEEE 802.15.4. A critical component of Zigbee’s success is the **Zigbee Cluster Library (ZCL)**. By organizing device functionality into standardized "Clusters," Zigbee ensures that a "Turn On" command from one manufacturer is understood by another’s bulb, effectively moving the interoperability challenge to the application layer.
+**(Next)**
+
+**(Slide 7: Z-Wave: The Sub-GHz Advantage - Fig 6)**
+Z-Wave takes a different physical approach by operating in the **sub-GHz spectrum**. Because lower frequencies have longer wavelengths, Z-Wave suffers significantly less attenuation when passing through concrete and timber. This provides superior indoor range and zero interference from the crowded 2.4 GHz band used by Wi-Fi and Bluetooth.
+**(Next)**
+
+**(Slide 8: Thread & DTLS Security - Fig 7)**
+Thread represents the shift toward IPv6-native mesh networking. Unlike Zigbee, Thread uses 6LoWPAN to give every sensor its own IP address. To secure this, Thread utilizes **DTLS**, or Datagram Transport Layer Security. DTLS implements its own sequence numbers and retransmission timers to ensure a secure handshake over the unreliable nature of UDP, providing bank-grade encryption.
+**(Next)**
+
+**(Slide 9: Performance Comparison - Fig 8)**
+When we compare these protocols on a radar chart, the trade-offs are clear. Wi-Fi dominates in speed but fails in power. Z-Wave leads in range, while Thread and Zigbee lead in scalability. For a Computer Engineer, the choice of protocol is never about finding a "winner," but about matching the specific constraints of the target application.
+**(Next)**
+
+**(Slide 10: Matter & The Hybrid Future - Fig 9 & 10)**
+The future is a **Hybrid** ecosystem. We expect Wi-Fi to remain the "Eyes and Ears" for high-bandwidth cameras, while Thread or Zigbee serves as the "Central Nervous System" for sensors. The **Matter Standard** unifies these by providing a common application layer, allowing devices to leverage the best of both worlds. 
+**(Next)**
+
+**(Slide 11: Conclusion)**
+In conclusion, while the IoT landscape remains technically fragmented, the convergence toward IP-based standards and Edge computing is creating a more resilient and interoperable smart home. Thank you for your time.
+**(End)**
+
+Slide #,Visual Content (Slide Design),Script (What to say),Timing
+1,"Title Slide: ""Smart Home IoT Protocols: A Taxonomical Survey."" Your Name, NTU, SC4031.","""Hello everyone. My name is Jonathan Low, and today I’ll be presenting my survey on the communication protocols that power the modern smart home—balancing the trade-offs between energy, scalability, and security.""",0:00-0:20
+2,"The Problem (Fig 1): Timeline of IoT. Keywords: Constraints, Density, Ambient Intelligence.","""We are moving from isolated gadgets to 'Ambient Intelligence.' The challenge? Most home devices are battery-constrained and hardware-limited, yet they must coexist in high-density environments. This creates an 'Iron Triangle' of trade-offs.""",0:20-0:50
+3,Architecture (Fig 2): Edge-Fog-Cloud diagram.,"""To manage this, we use a 3-layer hierarchy. The Edge handles perception, the Fog—via hubs and border routers—coordinates local logic, and the Cloud provides remote intelligence. Local survivability here is key.""",0:50-1:20
+4,Wi-Fi vs. BLE (Figs 3 & 4): Speed vs. Power icons.,"""Wi-Fi is our high-bandwidth baseline, but its power drain is too high for small sensors. BLE is the efficiency specialist, spending 99% of its time in deep sleep, though traditionally limited by its star topology.""",1:20-1:50
+5,Zigbee & ZCL (Fig 5): Mesh diagram & ZCL Cluster icons.,"""Zigbee solves scalability through mesh networking. A core strength is the Zigbee Cluster Library (ZCL), which standardizes device 'vocabulary'—ensuring a switch from one brand understands a bulb from another.""",1:50-2:30
+6,Z-Wave (Fig 6): 900MHz vs 2.4GHz wave penetration.,"""Unlike its 2.4GHz rivals, Z-Wave operates in the sub-GHz band. This allows for superior wall penetration and zero interference from Wi-Fi traffic, though it carries a lower data rate of 100 kbps.""",2:30-3:00
+7,Thread & DTLS (Fig 7): IPv6 flow & Security shield.,"""Thread is the newcomer, bringing native IPv6 support via 6LoWPAN. Because it uses UDP, it relies on DTLS for bank-grade security, allowing for end-to-end encryption from the sensor directly to the cloud.""",3:00-3:40
+8,The Radar Chart (Fig 8): Compare all 5 protocols.,"""Comparing these protocols (as seen in this radar chart), we see no single winner. Wi-Fi wins on speed; Z-Wave wins on range; Thread wins on security and scalability. It's a game of specific application needs.""",3:40-4:20
+9,The Future (Figs 9 & 10): Matter logo bridging radios + Edge/5G.,"""The future is a Hybrid ecosystem unified by the Matter standard. By leveraging Thread for low-power stability and Wi-Fi for fast cloud sync, Matter breaks the 'walled gardens' of the past.""",4:20-4:50
+10,Conclusion: Summary bullet points.,"""In summary, while protocols remain fragmented, standards like Matter and the shift toward Edge computing are creating a more secure, interoperable smart home. Thank you for your time.""",4:50-5:00

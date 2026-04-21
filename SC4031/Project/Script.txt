@@ -1,0 +1,37 @@
+---
+
+### **Demo Script (Revised with Performance Data)**
+*Copy this into your `.txt` file.*
+
+**[0:00-0:45] Introduction & Architecture**
+"Hello everyone. Today I am presenting my Hybrid Edge-Cloud Fall Detection System. To solve the challenge of high accuracy without draining IoT battery life, I implemented a two-stage cascade. Stage 1 is a local physical trigger on the phone, and Stage 2 is a cloud-based voice verification. This ensures the energy-heavy cloud connection is only active when a physical fall is likely. **(NEXT)**"
+
+**[0:45-1:45] Stage 1: Edge Detection & IMU Performance**
+"The Android app monitors the 6-axis IMU at 120Hz. To avoid constant processing, the system uses a threshold trigger of 40 m/s². I trained a custom TensorFlow Lite CNN model specifically for this hardware. In my final evaluations, as shown in my report, this local model achieved an **accuracy of 83.33% with an F1-score of 0.84**. This provides a reliable 'first filter' to detect sudden impacts while running natively on the device. **(NEXT)**"
+
+**[1:45-2:45] Stage 2: Cloud Verification & Audio Results**
+"When Stage 1 triggers, the app streams 1-second audio chunks to a Flask server. To ensure we never miss a keyword, the server uses a 'Stateful Rolling Buffer'—it combines these chunks into a 2-second window and applies a sliding window search. The cloud model uses MFCC features and `SeparableConv2D` layers. During testing, this model was exceptionally robust, achieving **100% accuracy and precision** in identifying the 'HELP' and 'CANCEL' keywords. **(NEXT)**"
+
+**[2:45-3:45] Advanced Features: Multi-User & Online Updates**
+"For the advanced requirements, the system supports multiple concurrent users. The server uses a unique `deviceId` for each connection to maintain separate audio buffers. I also implemented **Online Model Updating**. If the system makes a mistake, the user can submit a correction. The app sends the audio and the correct label to the server's `/update` endpoint, which triggers `model.train_on_batch` to retrain the model in real-time. This allows the system to learn and improve while it's still running. **(NEXT)**"
+
+**[3:45-5:00] Live Demo & Summary**
+"Now for the demo. [Action: Show phone UI] You can see the 'Link Established' status. I’ll simulate a fall impact—notice the UI triggers the microphone. I will say 'HELP'... and the cloud confirms the emergency, triggering a text-to-speech alert. By combining an 83% accurate edge model with a 100% accurate cloud verifier, we have a system that is both efficient and highly reliable. Thank you. **(FINISH)**"
+
+---
+
+### **Revised Slide Structure**
+
+| Slide # | Title | Key Visuals / Data to Include |
+| :--- | :--- | :--- |
+| **1** | **Hybrid Fall Detection** | System Diagram (Edge $\leftrightarrow$ Cloud). |
+| **2** | **Stage 1: Local Edge** | **Results:** 83.33% Acc, 0.84 F1-Score. Mention 120Hz IMU sampling. |
+| **3** | **Stage 2: Cloud Audio** | **Results:** 100% Acc/Precision. Visual of the 2s Rolling Buffer. |
+| **4** | **Advanced IoT Tasks** | Code snippets: `deviceId` for multi-user & `train_on_batch` for updates. |
+| **5** | **Performance Summary** | A final table comparing Edge vs. Cloud performance metrics. |
+| **6** | **Live Demo / Q&A** | Large "Link Established" UI screenshot. |
+
+### **Why this version is better for grading:**
+* **Explicit Metrics:** By saying "83.33% accuracy" and "100% precision," you are proving you completed the "Train your own model" and "Training results" requirements from the marking criteria.
+* **The "Why":** You explain *why* the metrics matter (Edge as a filter, Cloud as the final high-accuracy decider).
+* **Technical Keywords:** Including `SeparableConv2D` and `train_on_batch` signals to the markers that you understand the deep learning implementation.
