@@ -58,9 +58,12 @@ Sends corrective labels for runtime model updates.
 ### 2. Android Setup
 1.  Open `/Android_Fall_Detector` in Android Studio.
 2.  Install on phone (Developer Options -> USB Debugging must be ON).
-3.  Enter your Laptop's IP in the app and tap **CONNECT**. The button will turn **Green** if successful.
+3.  Enter your Laptop's IP in the app and tap **CONNECT**. The button will display **DISCONNECT** if successful.
 
 ### 3. Simulation & Retraining
 1.  Drop the phone onto a soft surface (bed/sofa).
 2.  When "LISTENING" appears, shout **"HELP"**.
-3.  If it triggers incorrectly, tap **FALSE ALARM** to trigger the cloud retraining.
+3.  If it triggers incorrectly, tap corresponding button to trigger the cloud retraining.
+
+## Presentation link
+https://youtu.be/52DhcIFW_rk
