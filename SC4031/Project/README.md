@@ -66,4 +66,4 @@ Sends corrective labels for runtime model updates.
 3.  If it triggers incorrectly, tap corresponding button to trigger the cloud retraining.
 
 ## Presentation link
-https://youtu.be/52DhcIFW_rk
+https://youtu.be/P0ylgOJBUII
