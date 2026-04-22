@@ -26,6 +26,7 @@ import java.io.FileInputStream
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -36,9 +37,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var tflite: Interpreter? = null
     private lateinit var tts: TextToSpeech
 
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(20, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
+        .writeTimeout(20, TimeUnit.SECONDS)
+        .build()
+
     // UI Elements
+    private lateinit var titleText: TextView
     private lateinit var statusText: TextView
     private lateinit var accelValues: TextView
+    private lateinit var gyroValues: TextView
     private lateinit var micIndicator: LinearLayout
     private lateinit var editServerIp: EditText
     private lateinit var feedbackLayout: LinearLayout
@@ -77,7 +86,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         setContentView(R.layout.activity_main)
 
         statusText = findViewById(R.id.status_text)
+        titleText = findViewById(R.id.title_text)
         accelValues = findViewById(R.id.accel_values)
+        gyroValues = findViewById(R.id.gyro_values)
         micIndicator = findViewById(R.id.mic_indicator)
         editServerIp = findViewById(R.id.edit_server_ip)
         feedbackLayout = findViewById(R.id.feedback_layout)
@@ -102,6 +113,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         btnFeedbackCancel.setOnClickListener { sendFeedbackToCloud("CANCEL") }
         btnFeedbackNone.setOnClickListener { sendFeedbackToCloud("BACKGROUND") }
         btnConnect.setOnClickListener { if (isConnected) disconnectFromServer() else testServerConnection() }
+
+        titleText.setOnLongClickListener {
+            if (isConnected) {
+                Toast.makeText(this, "DEMO: Triggering Voice Capture", Toast.LENGTH_SHORT).show()
+                startVoiceCapture()
+                true
+            } else {
+                Toast.makeText(this, "Connect to server first!", Toast.LENGTH_SHORT).show()
+                false
+            }
+        }
         
         requestPermissions()
     }
@@ -137,7 +159,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             if (sensorBuffer.size > SAMPLES_PER_GESTURE) sensorBuffer.removeAt(0)
 
             val mag = sqrt(currentAccel[0]*currentAccel[0] + currentAccel[1]*currentAccel[1] + currentAccel[2]*currentAccel[2])
-            accelValues.text = String.format("X: %.2f | Y: %.2f | Z: %.2f", currentAccel[0], currentAccel[1], currentAccel[2])
+            accelValues.text = String.format("X:%5.2f | Y:%5.2f | Z:%5.2f", currentAccel[0], currentAccel[1], currentAccel[2])
+            gyroValues.text = String.format("X:%5.2f | Y:%5.2f | Z:%5.2f", currentGyro[0], currentGyro[1], currentGyro[2])
 
             if (currentState == State.IDLE && mag > IMPACT_THRESHOLD) {
                 currentState = State.VERIFYING
@@ -153,6 +176,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private fun runInference() {
         if (sensorBuffer.size < SAMPLES_PER_GESTURE) { resetToIdle(); return }
+        if (!isConnected) {
+            runOnUiThread { Toast.makeText(this, "Please connect to server first!", Toast.LENGTH_LONG).show() }
+            resetToIdle()
+            return
+        }
         statusText.text = "ANALYZING..."
         statusText.setTextColor(resources.getColor(android.R.color.holo_orange_light))
         val inputBuffer = Array(1) { Array(SAMPLES_PER_GESTURE) { Array(NUM_CHANNELS) { FloatArray(1) } } }
@@ -166,7 +194,20 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             inputBuffer[0][i][5][0] = (Math.toDegrees(s[5].toDouble()).toFloat() + 400.0f) / 800.0f 
         }
         val output = Array(1) { FloatArray(2) }
-        try { tflite?.run(inputBuffer, output); if (output[0][0] > 0.5f) startVoiceCapture() else resetToIdle() } catch (e: Exception) { resetToIdle() }
+        try { 
+            tflite?.run(inputBuffer, output)
+            if (output[0][0] > 0.5f) {
+                startVoiceCapture() 
+            } else {
+                runOnUiThread { 
+                    Toast.makeText(this, "Impact detected, but not a fall.", Toast.LENGTH_SHORT).show()
+                    statusText.text = "FALSE ALARM"
+                    statusText.setTextColor(resources.getColor(android.R.color.darker_gray))
+                }
+                statusText.postDelayed({ if (currentState == State.IDLE) resetToIdle() }, 2000)
+                resetToIdle()
+            }
+        } catch (e: Exception) { resetToIdle() }
     }
 
     private fun startVoiceCapture() {
@@ -183,6 +224,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 if (chunk.isNotEmpty()) {
                     lastAudioData.addAll(chunk.toList())
                     val verdict = sendChunkToCloud(chunk)
+                    if (verdict == "ERROR") {
+                        runOnUiThread { 
+                            Toast.makeText(this@MainActivity, "Server connection lost!", Toast.LENGTH_SHORT).show()
+                            resetToIdle() 
+                        }
+                        return@Thread
+                    }
                     if (verdict == "HELP" || verdict == "CANCEL") {
                         runOnUiThread { handleCloudVerdict(verdict) }; return@Thread
                     }
@@ -214,7 +262,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val json = Gson().toJson(mapOf("deviceId" to android.provider.Settings.Secure.getString(contentResolver, android.provider.Settings.Secure.ANDROID_ID), "audio" to audio.toList()))
         val body = json.toRequestBody("application/json".toMediaTypeOrNull())
         return try {
-            val response = OkHttpClient().newCall(Request.Builder().url(url).post(body).build()).execute()
+            val response = client.newCall(Request.Builder().url(url).post(body).build()).execute()
+            if (!response.isSuccessful) return "ERROR"
             (Gson().fromJson(response.body?.string(), Map::class.java))["keyword"] as? String ?: "BACKGROUND"
         } catch (e: Exception) { "ERROR" }
     }
@@ -258,7 +307,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         Thread {
             try {
                 val json = Gson().toJson(mapOf("deviceId" to android.provider.Settings.Secure.getString(contentResolver, android.provider.Settings.Secure.ANDROID_ID), "label" to label, "audio" to lastAudioData))
-                OkHttpClient().newCall(Request.Builder().url(url).post(json.toRequestBody("application/json".toMediaTypeOrNull())).build()).execute()
+                client.newCall(Request.Builder().url(url).post(json.toRequestBody("application/json".toMediaTypeOrNull())).build()).execute()
                 runOnUiThread { Toast.makeText(this, "Feedback sent: $label", Toast.LENGTH_SHORT).show(); resetToIdle() }
             } catch (e: Exception) { runOnUiThread { Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show() } }
         }.start()
@@ -268,6 +317,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         currentState = State.IDLE
         statusText.text = "IDLE"
         statusText.setTextColor(resources.getColor(android.R.color.holo_green_dark))
+        micIndicator.visibility = View.GONE
         feedbackLayout.visibility = View.GONE
         lastCloudVerdict = ""
     }
@@ -296,7 +346,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         btnConnect.isEnabled = false
         Thread {
             try {
-                val response = OkHttpClient().newCall(Request.Builder().url(url).build()).execute()
+                val response = client.newCall(Request.Builder().url(url).build()).execute()
                 val status = (Gson().fromJson(response.body?.string(), Map::class.java))["status"]
                 runOnUiThread {
                     btnConnect.isEnabled = true

@@ -15,10 +15,10 @@ This folder contains the datasets and training notebooks for the Hybrid Edge-Clo
 ## 2. Cloud Audio Verification Model
 *   **Training Script:** `train_emergency_model.ipynb`
 *   **Model Results:** 
-*   **Accuracy:**  100.00%
-*   **Precision:** 100.00%
-*   **Recall:**    100.00%
-*   **F1-Score:**  1.0000
+*   **Accuracy:**  98.36%
+*   **Precision:** 98.41%
+*   **Recall:**    98.41%
+*   **F1-Score:**  0.9837
 *   **Summary:** Trained to classify "HELP", "CANCEL", and "BACKGROUND" noise using a 1-second 16kHz audio window processed as MFCCs.
 *   **Deployment:** Saved as `emergency_model.h5` for deployment on the Flask Cloud Server.
 

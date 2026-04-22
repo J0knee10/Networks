@@ -88,17 +88,50 @@
     </LinearLayout>
 
     <!-- Telemetry -->
-    <TextView
-        android:id="@+id/accel_values"
+    <LinearLayout
+        android:id="@+id/telemetry_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:fontFamily="monospace"
-        android:text="X: 0.00 | Y: 0.00 | Z: 9.81"
-        android:textSize="16sp"
+        android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/mic_indicator"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ACCELEROMETER (m/s²)"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#757575" />
+
+        <TextView
+            android:id="@+id/accel_values"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:text="X: 0.00 | Y: 0.00 | Z: 9.81"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GYROSCOPE (rad/s)"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#757575" />
+
+        <TextView
+            android:id="@+id/gyro_values"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:text="X: 0.00 | Y: 0.00 | Z: 0.00"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <!-- Feedback Layout (For Granular Retraining) -->
     <LinearLayout

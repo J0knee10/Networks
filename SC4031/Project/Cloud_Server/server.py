@@ -59,6 +59,7 @@ def infer():
             
         device_id = request.json.get('deviceId', 'Unknown')
         new_audio = np.array(request.json.get('audio', []), dtype=np.float32)
+        print(f"--- Inference Request from Device ID: {device_id} ---")
         
         if len(new_audio) == 0:
             return jsonify({"error": "No audio data"}), 400
