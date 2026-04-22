@@ -5,19 +5,19 @@
 ---
 
 **(Slide 1: Title Slide)**
-Hello everyone. My name is Jonathan Low, and today I’ll be presenting my taxonomical survey on the communication protocols that power the modern smart home. As we transition toward truly "Ambient Intelligence," the efficacy of these ecosystems is fundamentally tethered to the underlying protocols that must balance device density with severe energy and hardware constraints.
+Hello everyone. My name is Jonathan Low, and today I’ll be presenting my literature review on the communication protocols that power the modern smart home. As we transition toward truly "Ambient Intelligence," the efficacy of these ecosystems is fundamentally tethered to the underlying protocols that must balance device density with severe energy and hardware constraints.
 **(Next)**
 
 **(Slide 2: The Problem & Evolution - Fig 1)**
-The residential landscape is undergoing rapid digitalization. By the end of this decade, the density of connected nodes per household is projected to reach hundreds. However, we face a technical "Iron Triangle": the constant struggle between power consumption, data throughput, and range. Traditional high-speed paradigms often fail in these constrained-resource environments.
+The residential landscape is undergoing rapid digitalization. By the end of this decade, the density of connected nodes per household is projected to reach hundreds. However, we face a technical trade off, the constant struggle between power consumption, data throughput, range and other aspects like security and interoperability. Traditional high-speed paradigms often fail in these constrained-resource environments.
 **(Next)**
 
 **(Slide 3: IoT Architecture - Fig 2)**
-To manage this complexity, we utilize a three-layer "Edge-Fog-Cloud" hierarchy. The **Edge Layer** consists of the physical sensors and actuators. The **Fog Layer**—composed of hubs and border routers—acts as local coordination to ensure "Local Survivability." Finally, the **Cloud Layer** provides remote accessibility and heavy-duty data processing. 
+To manage this complexity, IoT utilizes a three-layer "Edge-Fog-Cloud" hierarchy. The **Edge Layer** consists of the physical sensors and actuators. The **Fog Layer**—composed of hubs and border routers which acts as local coordination to ensure "Local Survivability." Finally, the **Cloud Layer** provides remote accessibility and heavy-duty data processing. 
 **(Next)**
 
 **(Slide 4: Wi-Fi: The Connectivity Baseline - Fig 3)**
-We begin with Wi-Fi, or IEEE 802.11. Its primary strength is native IP support—allowing devices like smart cameras to connect directly to the internet. However, for a sensor meant to run on a coin-cell battery for two years, Wi-Fi’s high duty cycle and "always-on" radio requirements remain a critical barrier to deployment.
+We begin by analysing Wi-Fi, or IEEE 802.11. Its primary strength is native IP support—allowing devices like smart cameras to connect directly to the internet. However, for a sensor meant to run on a coin-cell battery for two years, Wi-Fi’s high duty cycle and "always-on" radio requirements remain a critical barrier to deployment.
 **(Next)**
 
 **(Slide 5: BLE: The Efficiency Specialist - Fig 4)**
@@ -29,11 +29,11 @@ Next is Zigbee, a mature mesh protocol built on IEEE 802.15.4. A critical compon
 **(Next)**
 
 **(Slide 7: Z-Wave: The Sub-GHz Advantage - Fig 6)**
-Z-Wave takes a different physical approach by operating in the **sub-GHz spectrum**. Because lower frequencies have longer wavelengths, Z-Wave suffers significantly less attenuation when passing through concrete and timber. This provides superior indoor range and zero interference from the crowded 2.4 GHz band used by Wi-Fi and Bluetooth.
+Z-Wave takes a different physical approach by operating in the **sub-GHz spectrum**. Because lower frequencies have longer wavelengths, Z-Wave suffers significantly less attenuation when passing through typical wall materials like concrete and timber. This provides superior indoor range and zero interference from the crowded 2.4 GHz band used by Wi-Fi and Bluetooth.
 **(Next)**
 
 **(Slide 8: Thread & DTLS Security - Fig 7)**
-Thread represents the shift toward IPv6-native mesh networking. Unlike Zigbee, Thread uses 6LoWPAN to give every sensor its own IP address. To secure this, Thread utilizes **DTLS**, or Datagram Transport Layer Security. DTLS implements its own sequence numbers and retransmission timers to ensure a secure handshake over the unreliable nature of UDP, providing bank-grade encryption.
+Thread represents the shift toward IPv6-native mesh networking. Unlike Zigbee, Thread uses 6LoWPAN to give every sensor its own IP address. To secure this, Thread utilizes **DTLS**, or Datagram Transport Layer Security. DTLS implements its own sequence numbers and retransmission timers to ensure a secure handshake over the unreliable nature of UDP, providing bank-grade encryption like AES.
 **(Next)**
 
 **(Slide 9: Performance Comparison - Fig 8)**
@@ -41,7 +41,7 @@ When we compare these protocols on a radar chart, the trade-offs are clear. Wi-F
 **(Next)**
 
 **(Slide 10: Matter & The Hybrid Future - Fig 9 & 10)**
-The future is a **Hybrid** ecosystem. We expect Wi-Fi to remain the "Eyes and Ears" for high-bandwidth cameras, while Thread or Zigbee serves as the "Central Nervous System" for sensors. The **Matter Standard** unifies these by providing a common application layer, allowing devices to leverage the best of both worlds. 
+The future is a **Hybrid** ecosystem. We expect Wi-Fi to remain the "Eyes and Ears" for high-bandwidth cameras and microphones, while protocols like Thread or Zigbee serves as the "Central Nervous System" for light weight sensors and actuators like bulbs. The **Matter Standard** unifies these by providing a common application layer, allowing devices to leverage the best of both worlds. 
 **(Next)**
 
 **(Slide 11: Conclusion)**
